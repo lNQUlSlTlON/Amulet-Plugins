@@ -1,3 +1,11 @@
+# Programmatic Lighting Placer
+# Place lighting on top of a post of your choice, or 
+#
+# Make sure your selection is only 1 block tall in the Y dimension
+#
+# (c) 2024 Black Forest Creations
+# Blame:  @lNQUlSlTlON
+
 import os
 import json
 import numpy as np
@@ -71,6 +79,10 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
 
         print("Operation completed successfully.")            
 
+"""
+These methods
+"""
+    
     @staticmethod
     def read_selection(world: "BaseLevel", dimension: Dimension, selection: SelectionGroup):
         coordinates = Detect_Edges.get_coordinates(world, dimension, selection)
