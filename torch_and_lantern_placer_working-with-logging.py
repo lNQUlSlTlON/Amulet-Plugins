@@ -79,12 +79,12 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
 
         print("Operation completed successfully.")            
 
-"""
-These methods are built to place the lighting of your choice, 
-spaced out by the radius of your choice.
-NumPy is used to build an array to detect edges between air blocks and filled blocks,
-as well as arrays for the spacing of the lights.
-"""
+    """
+    These methods are built to place the lighting of your choice, 
+    spaced out by the radius of your choice.
+    NumPy is used to build an array to detect edges between air blocks and filled blocks,
+    as well as arrays for the spacing of the lights.
+    """
     
     @staticmethod
     def read_selection(world: "BaseLevel", dimension: Dimension, selection: SelectionGroup):
