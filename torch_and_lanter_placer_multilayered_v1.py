@@ -89,7 +89,7 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
         step = self._step.GetValue()  # get the step value from the SpinCtrl
         ## Debug print statement for the coordinates
         # print(coordinates)
-        #print("Min Y:", min_y, "Max Y:", max_y, "Step:", step)
+        # print("Min Y:", min_y, "Max Y:", max_y, "Step:", step)
 
 
         def operation():
@@ -98,7 +98,7 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
             for y in range(min_y, max_y, step):
                 y_values.append(y)
             ## Debug print statement for the y_values
-            print(y_values)
+            # print(y_values)
 
             # Iterate over the Y values and run the operation for each one
             for y in y_values:
@@ -255,7 +255,7 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
                     true_blocks.append((i + min_x, y, j + min_z, edge, axis, operator, offset))
 
         # Debug print statement for the true_blocks dictionary
-        print(true_blocks)
+        # print(true_blocks)
 
         # Step 9: Create a 15x15 numpy array centered around each true_block
         platform, version_number = world.level_wrapper.platform, world.level_wrapper.version
