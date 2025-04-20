@@ -105,7 +105,7 @@ class Detect_Edges(wx.Panel, DefaultOperationUI):
                 current_y = int(y)  # Convert to int for compatibility with the world.get_block method
                 coordinates = self.read_selection(self.world, self.canvas.dimension, selection_group, current_y)
                 ## Debug print statement for the coordinates at the current Y level
-                print(coordinates)
+                # print(coordinates)
                 lighting_coordinates = self.detect_edges(coordinates, block_choice, detect_radius, self.world, self.canvas.dimension)
                 ## Debug print statement for the lighting_coordinates at the current Y level
                 #print(f"Lighting coordinates at Y={current_y}: {lighting_coordinates}")
