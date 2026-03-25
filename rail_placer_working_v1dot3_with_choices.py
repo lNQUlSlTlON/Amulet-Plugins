@@ -717,6 +717,7 @@ class Build_Railroad(wx.Panel, DefaultOperationUI):
                     if placed_block_iter == 1:
                         world.set_version_block(base_x, base_y + 1, base_z, dimension, (platform, version_number), rail_ns_block, None)                                            
                     return 'west-northwest', 'west-northwest', x1, y1, z1, x2, y2, z2, d1, d2, d3                
+            print(f"DEBUG determine_direction: block_differential={block_differential}, base=({base_x},{base_y},{base_z}), iter={placed_block_iter}")
             direction, facing, x1, y1, z1, x2, y2, z2, d1, d2, d3  = determine_direction(block_differential, base_x, base_y, base_z, placed_block_iter)
             direction_dict.append(direction)
         ## Debug print statement for the direction of the path    
