@@ -1,0 +1,7 @@
+docs/
+plans/
+amulet_source/
+__pycache__/
+.claude/
+test_*.py
+*.pyc
