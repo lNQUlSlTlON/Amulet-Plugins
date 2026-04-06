@@ -5,3 +5,5 @@ __pycache__/
 .claude/
 test_*.py
 *.pyc
+*.png
+*.md

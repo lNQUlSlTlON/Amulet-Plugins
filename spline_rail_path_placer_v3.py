@@ -657,7 +657,7 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                     d = (v[0]-p[0], v[1]-p[1], v[2]-p[2])
                     print(f"  [{idx:3d}] ({v[0]:5d}, {v[1]:3d}, {v[2]:5d})  delta=({d[0]:+d},{d[1]:+d},{d[2]:+d})")
 
-        _log_path("INPUT (after rasterization)")
+        # _log_path("INPUT (after rasterization)")
 
         # --- 9e. Gap Prevention ---
         # Verify every consecutive pair is within 1 block on all axes
@@ -680,7 +680,8 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                 i += 1
 
         if stats["gaps_filled"]:
-            _log_path("AFTER 9e (gap prevention)")
+            # _log_path("AFTER 9e (gap prevention)")
+            pass
 
         # --- 9a. REMOVED (v2) ---
         # Vertical stack prevention moved to post-filter (phase 10).
@@ -739,7 +740,8 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                 i += 1
 
         if stats["elevation_steps_fixed"]:
-            _log_path("AFTER 9b (elevation normalization)")
+            # _log_path("AFTER 9b (elevation normalization)")
+            pass
 
         # --- 9g. Diagonal Path Prevention ---
         # Pure diagonal steps (both dx!=0 and dz!=0, dy=0) that aren't part of
@@ -787,7 +789,8 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                 i += 1
 
         if stats["diagonals_fixed"]:
-            _log_path("AFTER 9g (diagonal prevention)")
+            # _log_path("AFTER 9g (diagonal prevention)")
+            pass
 
         # --- 9d. Turn-to-Incline Buffer ---
         # Reshape the last few zigzag blocks before each elevation change
@@ -877,19 +880,20 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                         fixed[reshape_start:i + 1] = replacement
                         new_i = reshape_start + len(replacement) - 1
                         stats["buffers_inserted"] += 1
-                        print(
-                            f"  9d: reshaped [{reshape_start}..{i}] ({old_len} blocks) "
-                            f"-> L-shape ({len(replacement)} blocks) "
-                            f"major={'X' if major_is_x else 'Z'}={major_disp}, "
-                            f"minor={'Z' if major_is_x else 'X'}={minor_disp}, "
-                            f"buffer before ascending at Y={elev_y}->{elev_y + dy}"
-                        )
+                        # print(
+                        #     f"  9d: reshaped [{reshape_start}..{i}] ({old_len} blocks) "
+                        #     f"-> L-shape ({len(replacement)} blocks) "
+                        #     f"major={'X' if major_is_x else 'Z'}={major_disp}, "
+                        #     f"minor={'Z' if major_is_x else 'X'}={minor_disp}, "
+                        #     f"buffer before ascending at Y={elev_y}->{elev_y + dy}"
+                        # )
                         i = new_i + 1
                         continue
             i += 1
 
         if stats["buffers_inserted"]:
-            _log_path("AFTER 9d (turn-to-incline buffer)")
+            # _log_path("AFTER 9d (turn-to-incline buffer)")
+            pass
 
         # --- 9c. Turn Flatness Enforcement ---
         # Turns (direction changes) must have dy=0 across all 3 blocks
@@ -926,7 +930,8 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                 i += 1
 
         if stats["turns_flattened"]:
-            _log_path("AFTER 9c (turn flatness)")
+            # _log_path("AFTER 9c (turn flatness)")
+            pass
 
         # --- 10. Post-Filter: Vertical Stack Cleanup ---
         # Runs after all path shaping is complete. Detects vertical stacks
@@ -978,12 +983,12 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                     path_positions.add(shifted)
                     fixed[i + 1] = shifted
                     stats["vertical_stacks_fixed"] += 1
-                    print(f"  10: vstack fix [{i}]->[{i+1}] shifted {nxt} -> {shifted}")
+                    # print(f"  10: vstack fix [{i}]->[{i+1}] shifted {nxt} -> {shifted}")
                     # Merge if shifted == next block
                     if i + 2 < len(fixed) and fixed[i + 1] == fixed[i + 2]:
                         path_positions.discard(fixed[i + 2])
                         fixed.pop(i + 2)
-                        print(f"  10: merged duplicate at [{i+2}]")
+                        # print(f"  10: merged duplicate at [{i+2}]")
                     break
             i += 1
 
@@ -996,7 +1001,7 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
                 by = abs(fixed[j][1] - fixed[i][1])
                 bz = abs(fixed[j][2] - fixed[i][2])
                 if bx <= 1 and by <= 1 and bz <= 1:
-                    print(f"  10b: KNOT at [{i}] {fixed[i]} <-> [{j}] {fixed[j]} (dist {j-i} apart in path)")
+                    print(f"  10b: KNOT at ({fixed[i][0]}, {fixed[i][1]}, {fixed[i][2]}) <-> ({fixed[j][0]}, {fixed[j][1]}, {fixed[j][2]})")
 
         # --- 10c. Post-Filter: Gap Detection ---
         # Consecutive blocks must be adjacent (each axis differs by at most 1,
@@ -1008,7 +1013,7 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
             ady = abs(nxt[1] - curr[1])
             adz = abs(nxt[2] - curr[2])
             if max(adx, ady, adz) > 1 or adx + ady + adz > 2:
-                print(f"  10c: GAP at [{i}]->[{i+1}] {curr} -> {nxt} (d={adx},{ady},{adz})")
+                print(f"  10c: GAP at ({curr[0]}, {curr[1]}, {curr[2]}) -> ({nxt[0]}, {nxt[1]}, {nxt[2]})")
 
         # --- 10d. Post-Filter: Turn Before Elevation ---
         # A direction change immediately before a Y transition confuses the
@@ -1028,12 +1033,13 @@ class SplineRailPathPlacerV3(wx.Panel, DefaultOperationUI):
             d2z = nxt[2] - curr[2]
             # Both steps have horizontal movement, but on different axes = turn
             if d1x != 0 and d2z != 0 and d1z == 0 and d2x == 0:
-                print(f"  10d: TURN BEFORE ELEV at [{i-2}]->[{i}] {prev}->{curr}->{nxt}")
+                print(f"  10d: TURN BEFORE ELEV at ({curr[0]}, {curr[1]}, {curr[2]})")
             elif d1z != 0 and d2x != 0 and d1x == 0 and d2z == 0:
-                print(f"  10d: TURN BEFORE ELEV at [{i-2}]->[{i}] {prev}->{curr}->{nxt}")
+                print(f"  10d: TURN BEFORE ELEV at ({curr[0]}, {curr[1]}, {curr[2]})")
 
         if stats["vertical_stacks_fixed"]:
-            _log_path("AFTER 10 (post-filter cleanup)")
+            # _log_path("AFTER 10 (post-filter cleanup)")
+            pass
 
         # --- 9d. Turn-to-Incline Buffer (Minimum 2 Flat Blocks) ---
         # DISABLED: Buffer insertion creates disconnected stubs because inserted
